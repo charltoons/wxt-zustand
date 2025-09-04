@@ -52,7 +52,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/charlton/wxt-zustand.git"
+    "url": "https://github.com/charltoons/wxt-zustand.git"
   },
   "dependencies": {
     "zustand": "^5.0.0",
