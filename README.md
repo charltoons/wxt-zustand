@@ -233,6 +233,37 @@ For large state objects, consider:
 - Implementing custom serializers to reduce payload size
 - Breaking large stores into smaller, focused stores
 
+## FAQ
+
+### Where should I define my actions?
+
+Define actions in the frontend (popup, content, options, devtools). Keep the background as the authoritative data hub for persistence/broadcast. This gives instant UI updates and lets the library sync changes to background and other contexts.
+
+Background-only actions are not exposed by this library today. For privileged work (tabs, network, etc.), call a background proxy-service function from inside your frontend action, then update state locally; the library will propagate the new state.
+
+```ts
+// store.ts (frontend)
+import { create } from 'zustand'
+import { wxtZustandStoreReady } from 'wxt-zustand'
+
+type Counter = { count: number; increment: () => Promise<void> }
+
+export const useCounter = create<Counter>()((set) => ({
+  count: 0,
+  increment: async () => {
+    // Optional: call background RPC for privileged work
+    // const svc = getMyBackgroundService()
+    // await svc.doSomethingPrivileged()
+
+    // Local update for snappy UX; library syncs to background/others
+    set((s) => ({ count: s.count + 1 }))
+  },
+}))
+
+// Somewhere in your UI entrypoint
+await wxtZustandStoreReady('counter', useCounter)
+```
+
 ## Credits
 
 This library is inspired by and builds upon the excellent work from:
