@@ -1,0 +1,15 @@
+# Per-example artifacts
+node_modules/
+.wxt/
+.output/
+dist/
+coverage/
+dev/
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+
+# Bun lockfile (if present per-example)
+bun.lock
+bun.lockb

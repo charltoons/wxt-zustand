@@ -1,0 +1,74 @@
+{
+  "name": "wxt-zustand",
+  "version": "1.0.0",
+  "description": "High-performance Zustand state management for WXT web extensions with seamless cross-tab synchronization and sub-10ms React re-renders",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:types": "tsc --emitDeclarationOnly -p tsconfig.json",
+    "build:all": "bun run build",
+    "test": "CLAUDECODE=1 bun test",
+    "test:watch": "bun test --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write --unsafe .",
+    "format": "biome format --write .",
+    "dev": "bun run --watch src/index.ts",
+    "prepublishOnly": "bun run build:all"
+  },
+  "keywords": [
+    "zustand",
+    "wxt",
+    "webext",
+    "browser-extension",
+    "web-extension",
+    "state-management",
+    "cross-tab",
+    "cross-context",
+    "synchronization",
+    "react",
+    "typescript",
+    "performance",
+    "manifest-v3",
+    "chrome-extension",
+    "firefox-addon",
+    "storage",
+    "background-script",
+    "content-script",
+    "popup"
+  ],
+  "author": "Charlton Roberts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/charlton/wxt-zustand.git"
+  },
+  "dependencies": {
+    "zustand": "^5.0.0",
+    "@webext-core/proxy-service": "^1.0.0",
+    "wxt": "^0.20.10"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.2",
+    "@types/bun": "latest",
+    "@types/react": "^19.1.12",
+    "@types/webextension-polyfill": "^0.12.0",
+    "react": "^19.1.1",
+    "typescript": "^5.9.2"
+  },
+  "peerDependencies": {
+    "zustand": "^5.0.0",
+    "wxt": "^0.20.10"
+  }
+}
