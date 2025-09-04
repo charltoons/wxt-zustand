@@ -1,6 +1,6 @@
 {
   "name": "wxt-zustand",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "High-performance Zustand state management for WXT web extensions with seamless cross-tab synchronization and sub-10ms React re-renders",
   "type": "module",
   "main": "dist/index.js",
