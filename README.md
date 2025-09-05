@@ -1,7 +1,7 @@
 # WXT-Zustand
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm version](https://badge.fury.io/js/wxt-zustand.svg)](https://www.npmjs.com/package/wxt-zustand)
+[![npm version](https://badge.fury.io/js/wxt-zustand.svg)](https://www.npmjs.com/package/wxt-zustand?0.1.0)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
 High-performance Zustand state management for WXT web extensions with seamless cross-tab synchronization and sub-10ms React re-renders.
