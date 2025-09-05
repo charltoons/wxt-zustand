@@ -215,6 +215,98 @@ bun run dev
 - ✅ Opera
 - ✅ Any browser supported by [webextension-polyfill](https://github.com/mozilla/webextension-polyfill)
 
+## How it works
+
+This library bridges [WXT](https://wxt.dev/) (Web Extension Toolkit) and [Zustand](https://github.com/pmndrs/zustand) to provide seamless state management across all parts of your Chrome extension.
+
+### High-Level Overview
+
+Chrome extensions run in multiple isolated contexts (background script, content scripts, popup, options page), each with their own JavaScript runtime. Normally, sharing state between these contexts requires complex message passing. This library abstracts that complexity by:
+
+1. **Unified Store Creation**: Define your Zustand store once and use it everywhere
+2. **Automatic State Sync**: Changes in one context automatically propagate to all others
+3. **WXT Integration**: Leverages WXT's messaging system for reliable cross-context communication
+4. **Type Safety**: Full TypeScript support with proper type inference across contexts
+
+### State Flow Architecture
+
+```mermaid
+stateDiagram-v2
+    [*] --> BackgroundScript
+
+    state BackgroundScript {
+        [*] --> StoreInitialized
+        StoreInitialized --> StateChanged : action dispatched
+        StateChanged --> BroadcastUpdate : via WXT messaging
+        BroadcastUpdate --> StoreInitialized
+    }
+
+    state ContentScript {
+        [*] --> StoreHydrated
+        StoreHydrated --> StateChanged : action dispatched
+        StateChanged --> SendToBackground : via WXT messaging
+        SendToBackground --> StoreHydrated : receive updates
+    }
+
+    state Popup {
+        [*] --> StoreHydrated
+        StoreHydrated --> StateChanged : user interaction
+        StateChanged --> SendToBackground : via WXT messaging
+        SendToBackground --> StoreHydrated : receive updates
+    }
+
+    state OptionsPage {
+        [*] --> StoreHydrated
+        StoreHydrated --> StateChanged : settings changed
+        StateChanged --> SendToBackground : via WXT messaging
+        SendToBackground --> StoreHydrated : receive updates
+    }
+
+    BackgroundScript --> ContentScript : broadcast state updates
+    BackgroundScript --> Popup : broadcast state updates
+    BackgroundScript --> OptionsPage : broadcast state updates
+
+    ContentScript --> BackgroundScript : send state changes
+    Popup --> BackgroundScript : send state changes
+    OptionsPage --> BackgroundScript : send state changes
+
+    note right of BackgroundScript
+        Acts as the central state authority
+        Persists state and coordinates updates
+    end note
+
+    note right of ContentScript
+        Injected into web pages
+        Receives state updates from background
+    end note
+
+    note right of Popup
+        Extension popup UI
+        Real-time state synchronization
+    end note
+
+    note right of OptionsPage
+        Extension settings page
+        Persistent configuration changes
+    end note
+```
+
+### Key Components
+
+- **Background Script**: Acts as the central state authority, maintaining the canonical state and coordinating updates across all contexts
+- **Context Stores**: Lightweight Zustand stores in each context (content script, popup, options) that stay synchronized with the background
+- **Message Bridge**: Handles serialization/deserialization of state updates using WXT's type-safe messaging system
+- **Persistence Layer**: Optional integration with Chrome storage APIs for state persistence across browser sessions
+
+### Benefits
+
+- **Developer Experience**: Write standard Zustand code without worrying about extension contexts
+- **Performance**: Minimal overhead with efficient state synchronization
+- **Reliability**: Built on WXT's robust messaging infrastructure
+- **Flexibility**: Works with any Zustand store configuration (middleware, devtools, etc.)
+
+For detailed API documentation, see the [WXT Documentation](https://wxt.dev/guide/essentials/messaging.html) and [Zustand Documentation](https://github.com/pmndrs/zustand).
+
 ## Troubleshooting
 
 ### Extension Context Invalidated
